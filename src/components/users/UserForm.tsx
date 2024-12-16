@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { UserInput } from "../../lib/api/users";
@@ -16,6 +16,7 @@ export function UserForm({
   onSubmit,
   isLoading
 }: UserFormProps) {
+  const [img, setImg] = useState<any>();
   const {
     register,
     handleSubmit,
@@ -32,14 +33,16 @@ export function UserForm({
   });
 
   // Watch for the selected file to display preview
-  const avatarFile = watch("avatar");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setValue("avatar", file);
+      setImg(file);
     }
   };
+
+  console.log(watch("avatar"));
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -58,9 +61,13 @@ export function UserForm({
           {...register("avatar")}
           onChange={handleFileChange}
         />
-        {avatarFile && (
+        {(img || defaultValues) && (
           <img
-            src={URL.createObjectURL(avatarFile)}
+            src={
+              defaultValues
+                ? defaultValues?.profile_img
+                : URL.createObjectURL(img)
+            }
             alt="Avatar Preview"
             className="rounded-full w-24 h-24 object-cover mx-auto"
           />
@@ -82,6 +89,36 @@ export function UserForm({
           <p className="mt-1 text-sm text-red-600">
             {errors.firstname.message}
           </p>
+        )}
+      </div>
+      <div>
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700">
+          Email
+        </label>
+        <input
+          type="text"
+          {...register("email", { required: "First name is required" })}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+        {errors.email && (
+          <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+        )}
+      </div>
+      <div>
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700">
+          password
+        </label>
+        <input
+          type="password"
+          {...register("password", { required: "First name is required" })}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+        {errors.password && (
+          <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
         )}
       </div>
 

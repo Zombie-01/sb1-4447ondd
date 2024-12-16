@@ -68,7 +68,6 @@ export function UserList() {
           className="border rounded px-3  w-full sm:w-1/3"
         />
         <div className="flex items-center justify-between mt-4">
-          <div>Role</div>
           <div className="flex items-center">
             <label htmlFor="role" className="mr-2 text-sm text-gray-700">
               Role:
@@ -77,7 +76,7 @@ export function UserList() {
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)} // Set the role state
-              className="block border rounded px-3 py-2 w-full focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              className="block border rounded px-3 py-2 h-full w-full focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
               <option value="">All</option>
               {roles?.map((role: any) => (
                 <option key={role.id} value={role.id}>
@@ -118,19 +117,26 @@ export function UserList() {
                   ) : (
                     users?.customers?.map((user) => (
                       <tr key={user.id}>
+                        {/* Name */}
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                           <div className="font-medium text-gray-900">
                             {user.firstname} {user.lastname}
                           </div>
                         </td>
+
+                        {/* Role */}
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {user.roles?.name}
+                          {user.Role?.name || "No role assigned"}
                         </td>
+
+                        {/* Last Login */}
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {user.last_login
                             ? new Date(user.last_login).toLocaleDateString()
                             : "Never"}
                         </td>
+
+                        {/* Actions */}
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <Link
                             to={`/users/${user.id}/edit`}

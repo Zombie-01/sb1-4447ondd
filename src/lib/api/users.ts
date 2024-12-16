@@ -53,7 +53,7 @@ export async function getUser(id: string) {
     .select(
       `
       *,
-      roles (
+      Role (
         id,
         name
       )
@@ -98,6 +98,10 @@ export async function createUser(formdata: { user: UserInput; avatar: File }) {
       .single();
 
     if (error) throw error;
+    await supabase.auth.signUp({
+      email: formdata.user?.email,
+      password: formdata.user?.password
+    });
     return data;
   } catch (error) {
     console.error("Error creating user:", error);

@@ -12,7 +12,7 @@ export async function getCustomers({
   searchTerm
 }: {
   startDate?: string;
-  searchTerm: string;
+  searchTerm?: string;
   endDate?: string;
   page?: number;
   limit?: number;

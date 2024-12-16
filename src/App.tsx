@@ -15,6 +15,7 @@ import { CashierDashboard } from "./pages/cashier/CashierDashboard";
 import { CreateCashierEntry } from "./pages/cashier/CreateCashierEntry";
 import { EditCashierEntry } from "./pages/cashier/EditCashierEntry";
 import { SettingsPage } from "./pages/settings/SettingsPage";
+import { PaymentList } from "./pages/payments/paymentList";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
               <Route path="cargo" element={<CargoList />} />
               <Route path="customers" element={<CustomerList />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="Payments" element={<PaymentList />} />
               <Route path="customers/new" element={<CreateCustomer />} />
               <Route path="customers/:id/edit" element={<EditCustomer />} />
               <Route path="users" element={<UserList />} />
