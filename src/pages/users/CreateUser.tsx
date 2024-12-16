@@ -1,8 +1,8 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UserForm } from '../../components/users/UserForm';
-import { createUser, UserInput } from '../../lib/api/users';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { UserForm } from "../../components/users/UserForm";
+import { createUser, UserInput } from "../../lib/api/users";
 
 export function CreateUser() {
   const navigate = useNavigate();
@@ -11,13 +11,22 @@ export function CreateUser() {
   const mutation = useMutation({
     mutationFn: createUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      navigate('/users');
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      navigate("/users");
     },
+    onError: (error: unknown) => {
+      console.error("Error creating user:", error);
+      alert("Failed to create user. Please try again.");
+    }
   });
 
-  const handleSubmit = async (data: UserInput) => {
-    await mutation.mutateAsync(data);
+  const handleSubmit = async (data: UserInput & { avatar: File | null }) => {
+    try {
+      console.log("daa", data);
+      await mutation.mutateAsync(data);
+    } catch (error) {
+      console.error("Error handling submit:", error);
+    }
   };
 
   return (

@@ -4,14 +4,46 @@ import type { Database } from "../../types/supabase";
 export type Customer = Database["public"]["Tables"]["customers"]["Row"];
 export type CustomerInput = Database["public"]["Tables"]["customers"]["Insert"];
 
-export async function getCustomers() {
-  const { data, error } = await supabase
-    .from("customers")
-    .select("*")
-    .order("name");
+export async function getCustomers({
+  startDate,
+  endDate,
+  page = 1,
+  limit = 10,
+  searchTerm
+}: {
+  startDate?: string;
+  searchTerm: string;
+  endDate?: string;
+  page?: number;
+  limit?: number;
+}) {
+  const from = (page - 1) * limit; // Calculate starting index for pagination
+  const to = from + limit - 1; // Calculate ending index for pagination
+
+  let query = supabase.from("customers").select("*", { count: "exact" });
+  if (searchTerm) {
+    query = query.ilike("name", `%${searchTerm}%`);
+  } // Enable total count
+
+  if (startDate) {
+    query = query.gte("created_at", startDate); // 'gte' = greater than or equal
+  }
+  if (endDate) {
+    query = query.lte("created_at", endDate); // 'lte' = less than or equal
+  }
+
+  query = query.range(from, to);
+
+  const { data, error, count } = await query;
 
   if (error) throw error;
-  return data;
+
+  return {
+    customers: data,
+    total: count,
+    currentPage: page,
+    totalPages: Math.ceil((count || 0) / limit)
+  };
 }
 
 export async function getCustomer(id: string) {
