@@ -1,11 +1,15 @@
-import React from 'react';
-import { Tabs } from '../../../components/ui/Tabs';
-import { ContainerRegistration } from '../../../components/cargo/ContainerRegistration';
-import { FieldRegistration } from '../../../components/cargo/FieldRegistration';
+import React from "react";
+import { Tabs } from "../../../components/ui/Tabs";
+import { ContainerRegistration } from "../../../components/cargo/ContainerRegistration";
+// import { FieldRegistration } from '../../../components/cargo/FieldRegistration';
 
 const tabs = [
-  { id: 'container', name: 'Container Registration', component: ContainerRegistration },
-  { id: 'field', name: 'Field Registration', component: FieldRegistration },
+  {
+    id: "container",
+    name: "Container Registration",
+    component: ContainerRegistration
+  }
+  // { id: 'field', name: 'Field Registration', component: FieldRegistration },
 ];
 
 export function ManagerCargoView() {
