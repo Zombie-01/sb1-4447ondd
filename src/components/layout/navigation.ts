@@ -6,7 +6,8 @@ import {
   User,
   Settings,
   type LucideIcon,
-  WalletCards
+  WalletCards,
+  Building
 } from "lucide-react";
 
 interface NavigationItem {
@@ -18,7 +19,7 @@ interface NavigationItem {
 export const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/", icon: BarChart3 },
   { name: "Cargo", href: "/cargo", icon: Package },
-  { name: "Customers", href: "/customers", icon: Users },
+  { name: "Logistic", href: "/logistic", icon: Building },
   { name: "Payments", href: "/payments", icon: WalletCards },
   { name: "Cashier", href: "/cashier", icon: CreditCard },
   { name: "Users", href: "/users", icon: User },

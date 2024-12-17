@@ -5,9 +5,6 @@ import { AuthProvider } from "./components/auth/AuthProvider";
 import { Layout } from "./components/layout/Layout";
 import { Dashboard } from "./pages/Dashboard";
 import { CargoList } from "./pages/cargo/CargoList";
-import { CustomerList } from "./pages/customers/CustomerList";
-import { CreateCustomer } from "./pages/customers/CreateCustomer";
-import { EditCustomer } from "./pages/customers/EditCustomer";
 import { UserList } from "./pages/users/UserList";
 import { CreateUser } from "./pages/users/CreateUser";
 import { EditUser } from "./pages/users/EditUser";
@@ -16,6 +13,14 @@ import { CreateCashierEntry } from "./pages/cashier/CreateCashierEntry";
 import { EditCashierEntry } from "./pages/cashier/EditCashierEntry";
 import { SettingsPage } from "./pages/settings/SettingsPage";
 import { PaymentList } from "./pages/payments/paymentList";
+import { CreatePayment } from "./pages/payments/CreatePayment";
+import { CargoPageLayout } from "./components/cargo/layout/CargoPageLayout";
+import { LogisticList } from "./pages/logistic/LogisticList";
+import { CreateLogistic } from "./pages/logistic/CreateLogistic";
+import { EditLogistic } from "./pages/logistic/EditCustomer";
+import { EditForeignLogistic } from "./pages/foreignLogistic/EditForeignCustomer";
+import { CreateForeignLogistic } from "./pages/foreignLogistic/CreateForeignLogistic";
+import { ForeignLogisticList } from "./pages/foreignLogistic/ForeignLogisticList";
 
 const queryClient = new QueryClient();
 
@@ -27,12 +32,29 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Dashboard />} />
-              <Route path="cargo" element={<CargoList />} />
-              <Route path="customers" element={<CustomerList />} />
+              <Route path="cargo" element={<CargoPageLayout />} />
+              <Route
+                path="logistic"
+                element={
+                  <div className="flex flex-col gap-10">
+                    <LogisticList />
+                    <ForeignLogisticList />
+                  </div>
+                }
+              />
               <Route path="settings" element={<SettingsPage />} />
-              <Route path="Payments" element={<PaymentList />} />
-              <Route path="customers/new" element={<CreateCustomer />} />
-              <Route path="customers/:id/edit" element={<EditCustomer />} />
+              <Route path="payments" element={<PaymentList />} />
+              <Route path="payment/new" element={<CreatePayment />} />
+              <Route path="logistic/new" element={<CreateLogistic />} />
+              <Route
+                path="foreign/logistic/new"
+                element={<CreateForeignLogistic />}
+              />
+              <Route path="logistic/:id/edit" element={<EditLogistic />} />
+              <Route
+                path="foreign/logistic/:id/edit"
+                element={<EditForeignLogistic />}
+              />
               <Route path="users" element={<UserList />} />
               <Route path="users/new" element={<CreateUser />} />
               <Route path="users/:id/edit" element={<EditUser />} />

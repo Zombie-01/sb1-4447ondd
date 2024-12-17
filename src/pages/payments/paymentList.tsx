@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Plus, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { downloadExcel } from "../../lib/utils";
 import { deletePayment, getPayments } from "../../lib/api/payment";
+import { getLogistics } from "../../lib/api/logistic";
+import { PaymentFormModal } from "../../components/payment/paymentForm";
+import { CreatePayment } from "./CreatePayment";
 
 export function PaymentList() {
   const [filters, setFilters] = useState({
@@ -22,6 +25,11 @@ export function PaymentList() {
     queryFn: () => getPayments(filters) // Fetch payments with filters
   });
 
+  const { data: customers, isLoading: isPending } = useQuery({
+    queryKey: ["customers"],
+    queryFn: () => getLogistics({})
+  });
+
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this payment?")) {
       try {
@@ -36,15 +44,11 @@ export function PaymentList() {
   const handleExport = () => {
     if (!entries) return;
 
-    const exportData = entries.map((entry) => ({
-      "Entry Date": entry.entry_date,
-      "Company Name": entry.cargo.customer.name,
-      "Payment Amount": entry.payment_amount,
-      "Payment Type": entry.payment_type,
-      "Yard Location": entry.yard_location,
-      "Movement Type": entry.movement_type,
-      "Movement Date": entry.movement_date,
-      Notes: entry.notes
+    const exportData = entries.payment.map((entry) => ({
+      "Entry Date": entry.date,
+      "Company Name": entry.customers.company_name,
+      "Payment Amount": entry.value,
+      "Payment Type": "Бэлэн бус"
     }));
 
     downloadExcel(exportData, "payments");
@@ -71,12 +75,7 @@ export function PaymentList() {
             <Download className="h-4 w-4 mr-2" />
             Export
           </button>
-          <Link
-            to="/payment/new"
-            className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-            <Plus className="h-4 w-4 mr-2" />
-            New Entry
-          </Link>
+          <CreatePayment />
         </div>
       </div>
 
@@ -93,10 +92,16 @@ export function PaymentList() {
               type="text"
               id="company_name"
               name="company_name"
+              list="company-name-suggestions"
               value={filters.company_name}
               onChange={handleFilterChange}
               className="mt-1 block w-full px-3 py-2 border rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
+            <datalist id="company-name-suggestions">
+              {customers?.logistics.map((logistic) => (
+                <option key={logistic?.id} value={logistic?.company_name} />
+              ))}
+            </datalist>
           </div>
           <div>
             <label
@@ -162,16 +167,16 @@ export function PaymentList() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {entries.map((entry) => (
+              {entries?.payment.map((entry) => (
                 <tr key={entry.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(entry.entry_date).toLocaleDateString()}
+                    {new Date(entry.date).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {entry.cargo.customer.name}
+                    {entry.customers.company_name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {entry.payment_amount}
+                    {entry.value}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button

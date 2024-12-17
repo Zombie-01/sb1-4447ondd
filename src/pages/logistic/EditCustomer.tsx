@@ -1,33 +1,33 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { CustomerForm } from '../../components/customers/CustomerForm';
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { LogisticForm } from "../../components/logistic/logisticForm";
 import {
-  getCustomer,
-  updateCustomer,
-  CustomerInput,
-} from '../../lib/api/customers';
+  getLogistic,
+  LogisticInput,
+  updateLogistic
+} from "../../lib/api/logistic";
 
-export function EditCustomer() {
+export function EditLogistic() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { data: customer, isLoading: isLoadingCustomer } = useQuery({
-    queryKey: ['customers', id],
-    queryFn: () => getCustomer(id!),
-    enabled: !!id,
+    queryKey: ["logistics", id],
+    queryFn: () => getLogistic(id!),
+    enabled: !!id
   });
 
   const mutation = useMutation({
-    mutationFn: (data: CustomerInput) => updateCustomer(id!, data),
+    mutationFn: (data: LogisticInput) => updateLogistic(id!, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['customers'] });
-      navigate('/customers');
-    },
+      queryClient.invalidateQueries({ queryKey: ["logistics"] });
+      navigate("/logistic");
+    }
   });
 
-  const handleSubmit = async (data: CustomerInput) => {
+  const handleSubmit = async (data: LogisticInput) => {
     await mutation.mutateAsync(data);
   };
 
@@ -42,11 +42,11 @@ export function EditCustomer() {
   return (
     <div className="max-w-2xl mx-auto py-8">
       <h1 className="text-2xl font-semibold text-gray-900 mb-8">
-        Edit Customer
+        Edit Logistic
       </h1>
       <div className="bg-white shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:p-6">
-          <CustomerForm
+          <LogisticForm
             defaultValues={customer}
             onSubmit={handleSubmit}
             isLoading={mutation.isPending}

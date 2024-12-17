@@ -1,10 +1,12 @@
 import { supabase } from "../supabase";
 import type { Database } from "../../types/supabase";
 
-export type Customer = Database["public"]["Tables"]["customers"]["Row"];
-export type CustomerInput = Database["public"]["Tables"]["customers"]["Insert"];
+export type ForeignLogistic =
+  Database["public"]["Tables"]["foreign_logistic"]["Row"];
+export type ForeignLogisticInput =
+  Database["public"]["Tables"]["foreign_logistic"]["Insert"];
 
-export async function getCustomers({
+export async function getForeignLogistics({
   startDate,
   endDate,
   page = 1,
@@ -20,7 +22,7 @@ export async function getCustomers({
   const from = (page - 1) * limit; // Calculate starting index for pagination
   const to = from + limit - 1; // Calculate ending index for pagination
 
-  let query = supabase.from("customers").select("*", { count: "exact" });
+  let query = supabase.from("foreign_logistic").select("*", { count: "exact" });
   if (searchTerm) {
     query = query.ilike("name", `%${searchTerm}%`);
   } // Enable total count
@@ -39,16 +41,16 @@ export async function getCustomers({
   if (error) throw error;
 
   return {
-    customers: data,
+    foreign_logistics: data,
     total: count,
     currentPage: page,
     totalPages: Math.ceil((count || 0) / limit)
   };
 }
 
-export async function getCustomer(id: string) {
+export async function getForeignLogistic(id: string) {
   const { data, error } = await supabase
-    .from("customers")
+    .from("foreign_logistic")
     .select("*")
     .eq("id", id)
     .single();
@@ -57,10 +59,10 @@ export async function getCustomer(id: string) {
   return data;
 }
 
-export async function createCustomer(customer: CustomerInput) {
+export async function createForeignLogistic(logistic: ForeignLogisticInput) {
   const { data, error } = await supabase
-    .from("customers")
-    .insert(customer)
+    .from("foreign_logistic")
+    .insert(logistic)
     .select()
     .single();
 
@@ -68,13 +70,13 @@ export async function createCustomer(customer: CustomerInput) {
   return data;
 }
 
-export async function updateCustomer(
+export async function updateForeignLogistic(
   id: string,
-  customer: Partial<CustomerInput>
+  foreign_logistic: Partial<ForeignLogisticInput>
 ) {
   const { data, error } = await supabase
-    .from("customers")
-    .update(customer)
+    .from("foreign_logistic")
+    .update(foreign_logistic)
     .eq("id", id)
     .select()
     .single();
@@ -83,22 +85,25 @@ export async function updateCustomer(
   return data;
 }
 
-export async function toggleCustomerActive(
+export async function toggleForeignLogisticActive(
   id: string,
   isActive: boolean
 ): Promise<void> {
   const { error } = await supabase
-    .from("customers")
+    .from("foreign_logistic")
     .update({ is_active: !isActive })
     .eq("id", id);
 
   if (error) {
-    throw new Error(`Failed to toggle customer active state: ${error.message}`);
+    throw new Error(`Failed to toggle logistic active state: ${error.message}`);
   }
 }
 
-export async function deleteCustomer(id: string) {
-  const { error } = await supabase.from("customers").delete().eq("id", id);
+export async function deleteForeignLogistic(id: string) {
+  const { error } = await supabase
+    .from("foreign_logistic")
+    .delete()
+    .eq("id", id);
 
   if (error) throw error;
 }

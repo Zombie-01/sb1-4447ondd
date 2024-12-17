@@ -3,12 +3,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Plus, Pencil, Trash2, Building2 } from "lucide-react";
 import {
-  getCustomers,
-  deleteCustomer,
-  toggleCustomerActive
-} from "../../lib/api/customers";
+  deleteLogistic,
+  getLogistics,
+  toggleLogisticActive
+} from "../../lib/api/logistic";
 
-export function CustomerList() {
+export function LogisticList() {
   const queryClient = useQueryClient();
 
   // State for filters and pagination
@@ -18,17 +18,17 @@ export function CustomerList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  // Fetch customers with filters and pagination
+  // Fetch logistic with filters and pagination
   const { data, isLoading } = useQuery({
-    queryKey: ["customers", { searchTerm, startDate, endDate, page, limit }],
-    queryFn: () => getCustomers({ searchTerm, startDate, endDate, page, limit })
+    queryKey: ["logistic", { searchTerm, startDate, endDate, page, limit }],
+    queryFn: () => getLogistics({ searchTerm, startDate, endDate, page, limit })
   });
 
   const { mutate: toggleActive } = useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
-      toggleCustomerActive(id, isActive),
+      toggleLogisticActive(id, isActive),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customers"] });
+      queryClient.invalidateQueries({ queryKey: ["logistic"] });
     },
     onError: (error) => {
       console.error("Failed to toggle active state:", error);
@@ -38,8 +38,8 @@ export function CustomerList() {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this customer?")) {
       try {
-        await deleteCustomer(id);
-        queryClient.invalidateQueries({ queryKey: ["customers"] });
+        await deleteLogistic(id);
+        queryClient.invalidateQueries({ queryKey: ["logistic"] });
       } catch (error) {
         console.error("Error deleting customer:", error);
       }
@@ -65,18 +65,18 @@ export function CustomerList() {
     <div>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">Customers</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">logistic</h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all customers including their company name, contact
+            A list of all logistic including their company name, contact
             information, and address.
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <Link
-            to="/customers/new"
+            to="/logistic/new"
             className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
             <Plus className="h-4 w-4 mr-2" />
-            Add Customer
+            Add Logistic
           </Link>
         </div>
       </div>
@@ -133,57 +133,61 @@ export function CustomerList() {
                 </thead>
                 <tbody className="divide-y divide-gray-200 w-full bg-white">
                   {isLoading ? (
-                    <div className="flex w-full justify-center items-center h-48">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-                    </div>
+                    <tr>
+                      <td
+                        colSpan={6}
+                        className="flex w-full justify-center items-center h-48">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                      </td>
+                    </tr>
                   ) : (
-                    data?.customers.map((customer) => (
-                      <tr key={customer.id}>
+                    data?.logistics.map((logistic) => (
+                      <tr key={logistic.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                           <div className="font-medium text-gray-900">
-                            {customer.name}
+                            {logistic.name}
                           </div>
                         </td>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                           <div className="flex items-center">
                             <Building2 className="h-5 w-5 text-gray-400 mr-2" />
                             <div className="font-medium text-gray-900">
-                              {customer.company_name}
+                              {logistic.company_name}
                             </div>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <div>{customer.email}</div>
-                          <div>{customer.phone}</div>
+                          <div>{logistic.email}</div>
+                          <div>{logistic.phone}</div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {customer.account}
+                          {logistic.account}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <button
                             onClick={() =>
                               handleToggleActive(
-                                customer.id,
-                                customer.is_active
+                                logistic.id,
+                                logistic.is_active
                               )
                             }
                             className={`px-2 py-1 rounded ${
-                              customer.is_active
+                              logistic.is_active
                                 ? "bg-green-100 text-green-800"
                                 : "bg-gray-100 text-gray-800"
                             }`}>
-                            {customer.is_active ? "Active" : "Inactive"}
+                            {logistic.is_active ? "Active" : "Inactive"}
                           </button>
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <Link
-                            to={`/customers/${customer.id}/edit`}
+                            to={`/logistic/${logistic.id}/edit`}
                             className="text-indigo-600 hover:text-indigo-900 mr-4">
                             <Pencil className="h-4 w-4 inline-block" />
                             <span className="sr-only">Edit</span>
                           </Link>
                           <button
-                            onClick={() => handleDelete(customer.id)}
+                            onClick={() => handleDelete(logistic.id)}
                             className="text-red-600 hover:text-red-900">
                             <Trash2 className="h-4 w-4 inline-block" />
                             <span className="sr-only">Delete</span>
@@ -203,7 +207,7 @@ export function CustomerList() {
       <div className="mt-4 flex justify-between items-center">
         <div className="flex items-center justify-between mt-4">
           <div>
-            Showing {data?.customers.length} of {data?.total} customers
+            Showing {data?.logistics.length} of {data?.total} logistic
           </div>
           <div className="flex items-center">
             <label htmlFor="limit" className="mr-2 text-sm text-gray-700">
@@ -231,7 +235,7 @@ export function CustomerList() {
           </button>
           <button
             onClick={() => setPage((prev) => prev + 1)}
-            disabled={(data?.customers?.length || 0) < limit}
+            disabled={(data?.logistics?.length || 0) < limit}
             className="px-4 py-2 rounded border bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50">
             Next
           </button>

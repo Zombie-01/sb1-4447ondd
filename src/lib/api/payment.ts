@@ -27,16 +27,17 @@ export async function getPayments({
     .select(`*, customers(name, company_name)`) // Include user details
     .range(from, to);
 
+  if (searchTerm) {
+    query = query.or(
+      `notes.ilike.%${searchTerm}%,customers.company_name.ilike.%${searchTerm}%`
+    );
+  }
   if (userId) {
     query = query.eq("user_id", userId);
   }
 
   if (startDate && endDate) {
-    query = query.gte("payment_date", startDate).lte("payment_date", endDate);
-  }
-
-  if (searchTerm) {
-    query = query.ilike("notes", `%${searchTerm}%`);
+    query = query.gte("date", startDate).lte("date", endDate);
   }
 
   const { data, error, count } = await query;

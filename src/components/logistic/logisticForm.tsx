@@ -1,23 +1,23 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { CustomerInput } from "../../lib/api/customers";
+import { LogisticInput } from "../../lib/api/logistic";
 
-interface CustomerFormProps {
-  defaultValues?: Partial<CustomerInput>;
-  onSubmit: (data: CustomerInput) => Promise<void>;
+interface logisticFormProps {
+  defaultValues?: Partial<LogisticInput>;
+  onSubmit: (data: LogisticInput) => Promise<void>;
   isLoading?: boolean;
 }
 
-export function CustomerForm({
+export function LogisticForm({
   defaultValues,
   onSubmit,
   isLoading
-}: CustomerFormProps) {
+}: logisticFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<CustomerInput>({
+  } = useForm<LogisticInput>({
     defaultValues
   });
 
@@ -32,7 +32,7 @@ export function CustomerForm({
         <input
           type="text"
           {...register("name", { required: "Company name is required" })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md px-3 py-2 border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
         {errors.name && (
           <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
@@ -49,7 +49,7 @@ export function CustomerForm({
           {...register("company_name", {
             required: "Company name is required"
           })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md px-3 py-2 border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
         {errors.name && (
           <p className="mt-1 text-sm text-red-600">
@@ -73,7 +73,7 @@ export function CustomerForm({
               message: "Invalid email address"
             }
           })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md px-3 py-2 border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
         {errors.email && (
           <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -89,7 +89,7 @@ export function CustomerForm({
         <input
           type="tel"
           {...register("phone", { required: "Phone number is required" })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md px-3 py-2 border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
         {errors.phone && (
           <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
@@ -104,7 +104,7 @@ export function CustomerForm({
         <input
           type="number"
           {...register("account", { required: "Account is required" })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md px-3 py-2 border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
         {errors.phone && (
           <p className="mt-1 text-sm text-red-600">{errors.account.message}</p>
@@ -120,7 +120,7 @@ export function CustomerForm({
         <textarea
           {...register("notes")}
           rows={3}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md px-3 py-2 border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
       </div>
 

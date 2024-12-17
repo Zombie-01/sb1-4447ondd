@@ -1,24 +1,23 @@
-import React from 'react';
-import { BarChart3, Package, Truck, Users } from 'lucide-react';
+import React from "react";
+import { BarChart3, Building, Package, Truck, Users } from "lucide-react";
 
 const stats = [
-  { name: 'Total Cargo', value: '2,651', icon: Package },
-  { name: 'Active Shipments', value: '427', icon: Truck },
-  { name: 'Customers', value: '156', icon: Users },
-  { name: 'Monthly Revenue', value: '$35,621', icon: BarChart3 },
+  { name: "Total Cargo", value: "2,651", icon: Package },
+  { name: "Active Shipments", value: "427", icon: Truck },
+  { name: "logistics", value: "156", icon: Building },
+  { name: "Monthly Revenue", value: "$35,621", icon: BarChart3 }
 ];
 
 export function Dashboard() {
   return (
     <div>
       <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-      
+
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((item) => (
           <div
             key={item.name}
-            className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6"
-          >
+            className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
             <dt>
               <div className="absolute rounded-md bg-indigo-500 p-3">
                 <item.icon className="h-6 w-6 text-white" />
@@ -28,7 +27,9 @@ export function Dashboard() {
               </p>
             </dt>
             <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-              <p className="text-2xl font-semibold text-gray-900">{item.value}</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {item.value}
+              </p>
             </dd>
           </div>
         ))}
@@ -48,7 +49,9 @@ export function Dashboard() {
                     <div className="flex space-x-3">
                       <div className="flex-1 space-y-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-sm font-medium">Cargo #{item}234</h3>
+                          <h3 className="text-sm font-medium">
+                            Cargo #{item}234
+                          </h3>
                           <p className="text-sm text-gray-500">2h ago</p>
                         </div>
                         <p className="text-sm text-gray-500">

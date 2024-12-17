@@ -1,10 +1,26 @@
 // Add to existing types
-export type UserRole = 'admin' | 'manager' | 'cashier';
+export type UserRole = "admin" | "manager" | "cashier";
 
-export interface CargoRegistration {
+export interface ContainerRegistration {
   container_serial: string;
-  capacity_id: string;
   logistic_id: string;
+  customer_id: string;
+  capacity_id: string;
+  route: string;
+  direction: number;
+  info_date: string;
+  cargo_name: string;
+  receiver_name: string
+  receiver_phone: string;
+  transport_cost: number;
+  currency_id: string;
+  payment_method: string;
+  additional_fees: string;
+  transfer_fee: string;
+  payment_responsible: string;
+  recipient: string;
+  phone_number: number;
+
   // ... other container registration fields
 }
 
